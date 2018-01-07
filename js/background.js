@@ -7,7 +7,7 @@
     window.browser = browser
   }
 
-  const DEBUG = true
+  const DEBUG = false
   const DB_NAME = DEBUG ? 'reading-list-test' : 'reading-list'
   const DB_VERSION = 1
   const DB_PAGE_STORE_NAME = 'page'

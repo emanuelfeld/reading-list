@@ -16,6 +16,7 @@
         "js/popup.js"
     ],
     "permissions": [
+        "https://web.archive.org/*",
         "contextMenus",
         "storage",
         "tabs"
