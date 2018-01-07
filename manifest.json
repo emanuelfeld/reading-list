@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+    "name": "Reading List",
+    "version": "0.1",
+    "description": "A barebones read-it-later browser extension that deletes items from your list after a week. Because my bookmarks folder is a black hole from which nothing gets read and yours probably is, too.",
+    "author": "Emanuel Feld",
+    "options_page": "index.html",
+    "background": {
+        "scripts": [
+            "js/background.js"
+        ]
+    },
+    "web_accessible_resources": [
+        "popup.html",
+        "js/index.js",
+        "js/popup.js"
+    ],
+    "permissions": [
+        "contextMenus",
+        "storage",
+        "tabs"
+    ],
+    "browser_action": {
+        "default_title": "Reading List",
+        "default_popup": "popup.html"
+    }
+}
