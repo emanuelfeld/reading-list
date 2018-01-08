@@ -1,5 +1,6 @@
 body {
   color:#333;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   font-size:15px;
   line-height:1.6em;
   margin:0 auto;
@@ -39,5 +40,5 @@ body {
 }
 
 .row-input:last-child {
-  border-bottom:1px solid #e0e0e0;  
+  border-bottom:1px solid #e0e0e0;
 }

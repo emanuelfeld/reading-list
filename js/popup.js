@@ -7,25 +7,25 @@
     window.browser = browser
   }
 
-  let titleInput = document.getElementById('title')
-  let urlInput = document.getElementById('url')
-  let submitButton = document.getElementById('submit')
-  let viewButton = document.getElementById('view')
+  const titleInput = document.getElementById('title')
+  const urlInput = document.getElementById('url')
+  const submitButton = document.getElementById('submit')
+  const viewButton = document.getElementById('view')
 
   window.browser.tabs.query({
     active: true,
     currentWindow: true
   }, function (tabs) {
-    let tab = tabs[0]
+    const tab = tabs[0]
     titleInput.value = tab.title.trim()
     urlInput.value = tab.url.trim()
   })
 
   function submit () {
-    let submitDisabled = submitButton.hasAttribute('disabled')
+    const submitDisabled = submitButton.hasAttribute('disabled')
 
     if (titleInput.value && urlInput.value && !submitDisabled) {
-      let data = {
+      const data = {
         'title': titleInput.value,
         'url': urlInput.value
       }
@@ -51,7 +51,7 @@
     window.browser.runtime.sendMessage({
       'type': 'view'
     }, function (res) {
-      window.open(res.data)
+      window.browser.tabs.create({ 'url': res.data })
     })
   })
 

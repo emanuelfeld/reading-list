@@ -7,7 +7,7 @@
     window.browser = browser
   }
 
-  let container = document.getElementById('container')
+  const container = document.getElementById('container')
 
   addArticles()
 
@@ -15,17 +15,17 @@
     window.browser.runtime.sendMessage({
       'type': 'get'
     }, function (res) {
-      let items = res.data
+      const items = res.data
 
       for (let daysLeft = 1; daysLeft < 8; daysLeft++) {
         if (items[daysLeft].length) {
-          let dayContainer = document.createElement('section')
-          let dayTitle = document.createElement('h2')
+          const dayContainer = document.createElement('section')
+          const dayTitle = document.createElement('h2')
           dayTitle.textContent = daysLeft
           dayContainer.appendChild(dayTitle)
 
           for (let i = 0; i < items[daysLeft].length; i++) {
-            let item = formatRow(items[daysLeft][i], dayContainer)
+            const item = formatRow(items[daysLeft][i], dayContainer)
             dayContainer.appendChild(item)
           }
 
@@ -36,17 +36,17 @@
   }
 
   function formatRow (item, dayContainer) {
-    let itemContainer = document.createElement('div')
+    const itemContainer = document.createElement('div')
     itemContainer.className = 'item-container'
 
-    let itemDelete = document.createElement('div')
+    const itemDelete = document.createElement('div')
     itemDelete.textContent = 'X'
     itemDelete.className = 'item-delete'
 
-    let itemLink = document.createElement('div')
+    const itemLink = document.createElement('div')
     itemLink.className = 'item-link'
 
-    let itemAnchor = document.createElement('a')
+    const itemAnchor = document.createElement('a')
     itemAnchor.setAttribute('target', '_blank')
     itemAnchor.href = item.url
     itemAnchor.textContent = item.title
@@ -56,8 +56,6 @@
     itemContainer.appendChild(itemLink)
 
     itemDelete.addEventListener('click', function () {
-      console.log(item.url)
-      console.log(item)
       itemContainer.remove()
       window.browser.runtime.sendMessage({
         'type': 'delete',

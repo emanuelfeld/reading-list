@@ -14,29 +14,32 @@
 
   let db
 
-  function todayEpochStart () {
-    const interval = 1000 * 60 * 60 * 24
-    let time = Math.floor(Date.now() / interval) * interval
-    return time
-  }
-
   openDB()
 
   window.browser.runtime.onMessage.addListener(handleMessage)
 
+  function todayEpochStart () {
+    const interval = 1000 * 60 * 60 * 24
+    const time = Math.floor(Date.now() / interval) * interval
+    return time
+  }
+
+  function daysElapsed (from, to) {
+    return (to - from) / (8.64e+7)
+  }
+
   function handleMessage (request, sender, sendResponse) {
     console.log('message', request)
-    let type = request.type
-    let data = request.data
+    const type = request.type
+    const data = request.data
     if (type === 'add') {
       addToDB(data)
       archiveURL(data.url)
-      sendResponse({ 'result': true })
     } else if (type === 'get') {
       getAllItemsInStore(DB_PAGE_STORE_NAME, sendResponse)
       return true
     } else if (type === 'view') {
-      let url = window.browser.extension.getURL('index.html')
+      const url = window.browser.extension.getURL('index.html')
       sendResponse({ 'data': url })
     } else if (type === 'delete') {
       removeFromDB(data)
@@ -44,7 +47,7 @@
   }
 
   function openDB () {
-    let req = indexedDB.open(DB_NAME, DB_VERSION)
+    const req = indexedDB.open(DB_NAME, DB_VERSION)
 
     req.onupgradeneeded = function (evt) {
       db = this.result
@@ -66,9 +69,9 @@
   }
 
   function addToDB (entry) {
-    let store = getObjectStore(DB_PAGE_STORE_NAME, 'readwrite')
+    const store = getObjectStore(DB_PAGE_STORE_NAME, 'readwrite')
     entry.date = todayEpochStart()
-    let req = store.put(entry)
+    const req = store.put(entry)
 
     req.onsuccess = function (evt) {
       console.log('Successfully added to reading list:', entry['url'])
@@ -81,8 +84,8 @@
   }
 
   function removeFromDB (id) {
-    let store = getObjectStore(DB_PAGE_STORE_NAME, 'readwrite')
-    let req = store.delete(id)
+    const store = getObjectStore(DB_PAGE_STORE_NAME, 'readwrite')
+    const req = store.delete(id)
 
     req.onsuccess = function (evt) {
       console.log('Successfully deleted from reading list:', id)
@@ -95,7 +98,7 @@
   }
 
   function getObjectStore (storeName, mode) {
-    let tx = db.transaction(storeName, mode)
+    const tx = db.transaction(storeName, mode)
     return tx.objectStore(storeName)
   }
 
@@ -106,24 +109,21 @@
       })
   }
 
-  function daysElapsed (from, to) {
-    return (to - from) / (8.64e+7)
-  }
-
   function getAllItemsInStore (storeName, sendResponse) {
-    let tx = db.transaction(storeName, 'readwrite')
-    let store = tx.objectStore(storeName)
-    let req = store.openCursor()
-    let items = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [] }
-    let today = todayEpochStart()
+    const tx = db.transaction(storeName, 'readwrite')
+    const store = tx.objectStore(storeName)
+    const req = store.openCursor()
+    const items = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [] }
+    const today = todayEpochStart()
 
     req.onsuccess = function (evt) {
-      let cursor = evt.target.result
+      const cursor = evt.target.result
       if (cursor) {
-        let expiry = 7 - daysElapsed(cursor.value.date, today)
+        const expiry = 7 - daysElapsed(cursor.value.date, today)
         if (expiry > 0) {
           items[expiry].push(cursor.value)
         } else {
+          console.log('Deleting expired link from list:', cursor.value.url)
           cursor.delete()
         }
         cursor.continue()
