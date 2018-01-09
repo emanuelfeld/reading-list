@@ -30,15 +30,17 @@
         'url': urlInput.value
       }
 
+      submitButton.textContent = 'Added'
+      submitButton.setAttribute('disabled', 'true')
+
       window.browser.runtime.sendMessage({
         'type': 'add',
         'data': data
       }, function (res) {
-        submitButton.textContent = 'Added'
-        submitButton.setAttribute('disabled', 'true')
+        console.log('Backup status:', res.data)
         setTimeout(function () {
           window.close()
-        }, 2000)
+        }, 800)
       })
     }
   }

@@ -33,8 +33,8 @@
     const type = request.type
     const data = request.data
     if (type === 'add') {
-      addToDB(data)
-      archiveURL(data.url)
+      addToDB(data, sendResponse)
+      return true
     } else if (type === 'get') {
       getAllItemsInStore(DB_PAGE_STORE_NAME, sendResponse)
       return true
@@ -43,6 +43,7 @@
       sendResponse({ 'data': url })
     } else if (type === 'delete') {
       removeFromDB(data)
+      sendResponse({ 'data': true })
     }
   }
 
@@ -68,13 +69,14 @@
     }
   }
 
-  function addToDB (entry) {
+  function addToDB (entry, sendResponse) {
     const store = getObjectStore(DB_PAGE_STORE_NAME, 'readwrite')
     entry.date = todayEpochStart()
     const req = store.put(entry)
 
     req.onsuccess = function (evt) {
       console.log('Successfully added to reading list:', entry['url'])
+      archiveURL(entry.url, sendResponse)
     }
 
     req.onerror = function (evt) {
@@ -102,10 +104,11 @@
     return tx.objectStore(storeName)
   }
 
-  function archiveURL (url) {
+  function archiveURL (url, sendResponse) {
     fetch('https://web.archive.org/save/' + url)
       .then(function (res) {
         console.log('Attempted back up of', url, 'with response', res.status)
+        sendResponse({ 'data': res.status })
       })
   }
 

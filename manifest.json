@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Reading List",
-    "version": "0.3",
+    "version": "0.4",
     "description": "A read-it-later browser extension for people with overly ambitious bookmarking habits.",
     "author": "Emanuel Feld",
     "background": {
